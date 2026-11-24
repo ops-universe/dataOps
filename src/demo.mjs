@@ -1,0 +1,1 @@
+import {ingest,validate} from './dataset.mjs';import {readFile} from 'node:fs/promises';const dataset=await ingest('fixtures','catalog.json');const schema=JSON.parse(await readFile('fixtures/catalog.schema.json','utf8'));console.log(JSON.stringify(validate(dataset,schema),null,2));
