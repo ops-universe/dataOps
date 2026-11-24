@@ -1,0 +1,1 @@
+{"schemaVersion":1,"fields":[{"name":"sku","type":"string","required":true},{"name":"price","type":"number","required":true},{"name":"active","type":"boolean","required":true}]}
