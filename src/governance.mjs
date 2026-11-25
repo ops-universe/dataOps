@@ -6,8 +6,8 @@ export function governance(dataset,{splitField='split',labelField='label',identi
  const splits={train:0,validation:0,test:0},labels=new Map(),seen=new Map(),evidence=[],fingerprints=[],sensitive={email:0,phoneLike:0},invalid={split:0,identity:0,label:0};let crossSplit=0;
  for(const [index,row] of dataset.rows.entries()){
  const split=row[splitField];const full=hash(canonical(row));fingerprints.push(full);
- for(const v of Object.values(row)){if(typeof v!=='string'||v.length>4096)continue;if(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test(v))sensitive.email++;if(/(?:^|\s)\+?\d[\d ()-]{7,18}\d(?:$|\s)/.test(v))sensitive.phoneLike++;}
- if(!Object.hasOwn(splits,split)){invalid.split++;continue;}splits[split]++;
+ for(const v of Object.values(row)){if(typeof v!=='string'||v.length>4096)continue;if(/\b[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]{1,253}\.[A-Za-z]{2,63}\b/.test(v))sensitive.email++;if(/(?:^|\s)\+?\d[\d ()-]{7,18}\d(?:$|\s)/.test(v))sensitive.phoneLike++;}
+ if(typeof split!=='string'||!Object.hasOwn(splits,split)){invalid.split++;continue;}splits[split]++;
  if(!Object.hasOwn(row,labelField)||row[labelField]===null)invalid.label++;else{const k=JSON.stringify(row[labelField]);if(!labels.has(k))labels.set(k,{train:0,validation:0,test:0});labels.get(k)[split]++;}
  const keys=identityFields.length?identityFields:Object.keys(row).filter(k=>k!==splitField).sort();
  if(!keys.length||keys.some(k=>!Object.hasOwn(row,k)||row[k]===null)){invalid.identity++;continue;}

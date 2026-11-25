@@ -1,3 +1,3 @@
 # Resume
 
-Last verified main 43abfe4840c1b2fe95bbdae4fbc2aeac38f7ac0d. PR #5 merged after four successful checks. Current branch feat/dashboard-enterprise. Verify exact-head CI, mandatory reviews and protections. npm ci && npm test; node src/dashboard-server.mjs; website-react npm ci && npm audit --audit-level=high && npm run build. Next: actual browser acceptance, security/resource review and status reconciliation. Public release deferred.
+Verified main 27037d2f70e60744d3fd7c2163b4f2dabb06977c (4/4 CI). Branch feat/final-acceptance. Verify exact-head core, website, browser checks and audits, reviews and protections; merge only if eligible. Reproduce npm ci && npm test; cd browser-runner && npm ci && npm audit --audit-level=high && npx --no-install playwright install --with-deps chromium && npx --no-install playwright test. Then reconcile final acceptance evidence. Public release deferred.

@@ -1,9 +1,6 @@
 # Changelog
 
 ## Unreleased
-- PR #1 foundation and bounded ingestion.
-- PR #2 deterministic profiling.
-- PR #3 quality rules.
-- PR #4 ingestion hardening and split governance.
-- PR #5 merged: version comparison, drift and CLI gates.
-- Add loopback-only dashboard with origin/token checks, functional report views and synthetic enterprise scenarios.
+- PRs #1–#5: foundation, ingestion, profiling, quality, governance and regression CLI.
+- PR #6 merged: local dashboard and synthetic enterprise scenarios; post-merge CI passed.
+- Add locked Chromium acceptance runner, hostile markup and invalid-import browser tests, HTTP and input-limit tests, stricter governance split typing and security documentation.
