@@ -1,8 +1,8 @@
 # Roadmap
 
-- [ ] Phase 1: foundation (implemented on branch; verification pending)
-- [ ] Phase 2: ingestion and schema validation (initial slice implemented; verification pending)
-- [ ] Phase 3: profiling
+- [x] Phase 1: foundation (PR #1 merged; main CI passed)
+- [ ] Phase 2: initial bounded ingestion and schema validation merged; remaining adversarial hardening and contract acceptance review
+- [ ] Phase 3: profiling implemented on feature branch; CI pending
 - [ ] Phase 4: quality engine
 - [ ] Phase 5: split integrity and governance
 - [ ] Phase 6: regression and CLI
