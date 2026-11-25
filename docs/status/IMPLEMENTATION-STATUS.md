@@ -1,3 +1,3 @@
 # Status
 
-Main 9a24f27aea25f7192f9e71c02c4a6ca690ea4098 verified; PR #3 merged with four passing checks and two main checks. Ingestion hardening and initial governance implemented on feat/ingestion-governance; CI pending. Trusted root still required; no race-free sandbox guarantee. Governance is heuristic, not proof of anonymity or no leakage. Dataset comparison pending. Public release and promotional work deferred.
+Verified main 10e19b74b7847a5e688ec3a3717a190f030d56cf: four successful checks; PR #4 merged. Phase 2 accepted within trusted-root threat model; no race-free filesystem guarantee. Split governance tested, heuristic only, not proof of anonymity or no leakage. Regression and CLI implemented on feat/regression-cli; exact-head CI pending. Next dashboard, synthetic enterprise scenarios and final security review. Public release deferred.

@@ -1,3 +1,3 @@
 # Resume
 
-Verified main 9a24f27aea25f7192f9e71c02c4a6ca690ea4098. Verify feat/ingestion-governance PR exact-head checks and merge eligibility. npm ci && npm test; website-react npm ci && npm audit --audit-level=high && npm run build. Next: version comparison, regression CLI, dashboard and enterprise scenarios. Public release deferred.
+Last verified main 10e19b74b7847a5e688ec3a3717a190f030d56cf. Four checks passed. Active branch feat/regression-cli. Verify PR head CI, reviews, rules and merge eligibility. Reproduce npm ci && npm test; cd website-react && npm ci && npm audit --audit-level=high && npm run build. Next functional local dashboard and enterprise scenarios. Trusted root required; no anonymization or leakage guarantee. Public release deferred.
