@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { open, realpath } from 'node:fs/promises';
+import { open, realpath, lstat } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { resolve, relative, isAbsolute, sep, extname } from 'node:path';
 export const VERSION=1;
@@ -29,12 +29,21 @@ export function parseCsv(text){
  rowCheck(Object.fromEntries(headers.map(k=>[k,null])));
  return rows.map(r=>{if(r.length!==headers.length)throw Error('CSV width mismatch');return Object.fromEntries(headers.map((k,i)=>[k,r[i]]));});
 }
+// Flat JSON records only: reject duplicate decoded keys before constructing objects.
+function strictJson(text, array){
+ let i=0;const ws=()=>{while(i<text.length&&/[ \t\r\n]/.test(text[i]))i++;};
+ const take=c=>{ws();if(text[i++]!==c)throw Error('Malformed JSON');};
+ function str(){ws();if(text[i]!=='"')throw Error('Expected JSON string');const start=i++;while(i<text.length){const c=text[i++];if(c==='\\'){i++;continue;}if(c==='"')return JSON.parse(text.slice(start,i));}throw Error('Unterminated JSON string');}
+ function value(){ws();if(text[i]==='"')return str();const start=i;while(i<text.length&&!/[ \t\r\n,}\]]/.test(text[i]))i++;if(start===i)throw Error('Expected scalar');const v=JSON.parse(text.slice(start,i));if(v!==null&&!['number','boolean'].includes(typeof v))throw Error('Expected scalar');return v;}
+ function record(){take('{');const entries=[],seen=new Set();ws();if(text[i]==='}'){i++;return {};}while(true){const k=str();if(seen.has(k))throw Error('Duplicate JSON field');seen.add(k);if(seen.size>LIMITS.fields)throw Error('Too many fields');take(':');entries.push([k,value()]);ws();if(text[i]==='}'){i++;break;}take(',');}return rowCheck(Object.fromEntries(entries));}
+ let result;if(array){take('[');result=[];ws();if(text[i]===']')i++;else while(true){if(result.length>=LIMITS.rows)throw Error('Too many records');result.push(record());ws();if(text[i]===']'){i++;break;}take(',');}}else result=record();ws();if(i!==text.length)throw Error('Trailing JSON input');return result;
+}
 export function parseDataset(bytes,format){
  if(!(bytes instanceof Uint8Array)||bytes.byteLength>LIMITS.bytes)throw Error('Input byte limit exceeded');
  const text=new TextDecoder('utf-8',{fatal:true}).decode(bytes);let rows;
  if(format==='csv')rows=parseCsv(text);
- else if(format==='json')rows=JSON.parse(text);
- else if(format==='jsonl')rows=text.split(/\r?\n/).filter(x=>x.trim()).map(x=>JSON.parse(x));
+ else if(format==='json')rows=strictJson(text,true);
+ else if(format==='jsonl'){rows=[];for(const line of text.split(/\r?\n/)){if(!line.trim())continue;if(rows.length>=LIMITS.rows)throw Error('Too many records');rows.push(strictJson(line,false));}}
  else throw Error('Unsupported format');
  if(!Array.isArray(rows)||rows.length>LIMITS.rows)throw Error('Invalid record count');
  rows.forEach(rowCheck);
@@ -47,10 +56,12 @@ export async function ingest(root,path){
  const candidate=resolve(base,path);if(!inside(candidate))throw Error('Path outside dataset root');
  const actual=await realpath(candidate);if(!inside(actual)||actual!==candidate)throw Error('Symlink or path outside root');
  const format=extname(actual).slice(1).toLowerCase();if(!['csv','json','jsonl'].includes(format))throw Error('Unsupported format');
+ const before=await lstat(actual);if(!before.isFile())throw Error('Not a regular file');
  const fd=await open(actual,constants.O_RDONLY|constants.O_NOFOLLOW|constants.O_NONBLOCK);
- try{const stat=await fd.stat();if(!stat.isFile()||stat.size>LIMITS.bytes)throw Error('Not a bounded regular file');
+ try{const stat=await fd.stat();if(!stat.isFile()||stat.dev!==before.dev||stat.ino!==before.ino||stat.size>LIMITS.bytes)throw Error('Not a bounded regular file');
  const buffer=Buffer.alloc(LIMITS.bytes+1);let offset=0;
  while(offset<buffer.length){const {bytesRead}=await fd.read(buffer,offset,buffer.length-offset,null);if(!bytesRead)break;offset+=bytesRead;}
+ const after=await fd.stat();const current=await lstat(actual);if(await realpath(actual)!==actual||current.dev!==stat.dev||current.ino!==stat.ino||after.size!==stat.size||after.mtimeMs!==stat.mtimeMs||after.ctimeMs!==stat.ctimeMs||offset!==stat.size)throw Error('File changed during ingestion');
  return {...parseDataset(buffer.subarray(0,offset),format),provenance:{source:relative(base,actual)}};
  }finally{await fd.close();}
 }
