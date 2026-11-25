@@ -1,3 +1,3 @@
 # Resume
 
-Last verified main: c172500dbcf129680ce2bbe0be1e623830a3defb. Main CI: four successful checks. Current branch feat/profiling. Verify exact-head CI and required reviews before merging. Reproduce: npm ci && npm test && npm run demo; cd website-react && npm ci && npm audit --audit-level=high && npm run build. Next: quality engine, ingestion hardening, governance and CLI. No release claim.
+Last verified main: def9a00b4fffb20135c3ccd67e7fb296a81ce738 (PR #2 merged with four passing checks). Current branch feat/quality-engine. Verify exact-head CI and review requirements, merge eligible PR, update status. Reproduce: npm ci && npm test && npm run demo; cd website-react && npm ci && npm audit --audit-level=high && npm run build. Next: governance, ingestion hardening, CLI and regression. No release claim.

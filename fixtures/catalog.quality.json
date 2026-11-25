@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "rules": [
+    {
+      "id": "sku-required",
+      "kind": "required",
+      "field": "sku"
+    },
+    {
+      "id": "sku-unique",
+      "kind": "unique",
+      "field": "sku"
+    },
+    {
+      "id": "price-required",
+      "kind": "required",
+      "field": "price"
+    },
+    {
+      "id": "price-range",
+      "kind": "range",
+      "field": "price",
+      "min": 0,
+      "max": 100000
+    }
+  ]
+}

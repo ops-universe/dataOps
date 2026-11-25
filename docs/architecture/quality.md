@@ -1,0 +1,3 @@
+# Quality contract v1
+
+Rules: required, type, range (inclusive finite numbers), allowed (typed scalar values), unique (later occurrences fail), pattern (ASCII glob with * and ?, no regex), compare (eq/ne or same-type ordered number/string). Rules have unique IDs and field names. Missing and null skip non-required rules; required rejects both. Reports omit raw values, cap detailed violations independently of failure counts, and score successful evaluated checks; no checks yields null. Glob matching has per-value and aggregate work budgets. Use only local trusted data; schema and contract files are not executable. No automatic repairs.
