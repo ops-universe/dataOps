@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {parseDataset} from '../src/dataset.mjs';import {profile} from '../src/profile.mjs';
+const p=(rows,opts)=>profile(parseDataset(Buffer.from(JSON.stringify(rows)),'json'),opts);
+test('counts missing null duplicate and types independently',()=>{const result=p([{a:1,b:'x'},{b:'x',a:1},{a:null},{b:false},{a:3}]);assert.equal(result.recordCount,5);assert.equal(result.duplicateRecords,1);assert.equal(result.uniqueRecords,4);const a=result.fields[0];assert.equal(a.missing,1);assert.equal(a.nulls,1);assert.equal(a.uniqueNonNull,2);assert.deepEqual(a.types,{string:0,number:3,boolean:0,null:1});assert.equal(a.numeric.min,1);assert.equal(a.numeric.max,3);assert.ok(Math.abs(a.numeric.mean-5/3)<1e-12);});
+test('stable category ranking and typed identity',()=>{const result=p([{a:1},{a:'1'},{a:true},{a:'1'}],{maxCategories:1});assert.deepEqual(result.fields[0].categories,[{value:'1',count:2}]);assert.equal(result.fields[0].omittedCategories,2);});
+test('empty and extreme numbers',()=>{assert.deepEqual(p([]).fields,[]);assert.equal(p([{a:1e308},{a:1e308}]).fields[0].numeric.mean,1e308);});
+test('reject invalid options and excessive union of fields',()=>{assert.throws(()=>p([],{maxCategories:101}));assert.throws(()=>p(Array.from({length:257},(_,i)=>({['f'+i]:i}))));});
