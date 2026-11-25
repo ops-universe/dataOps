@@ -1,3 +1,3 @@
 # Status
 
-Main def9a00b4fffb20135c3ccd67e7fb296a81ce738 verified after PR #2 merge; all four PR checks passed. Phase 3 merged. Phase 2 residual risks: duplicate JSON keys and hostile concurrent filesystem mutation. Phase 4 implemented on feat/quality-engine; exact-head CI pending. Glob patterns deliberately replace arbitrary regex. Missing/null skip non-required rules; combine required and type rules for mandatory values. Empty score is null, not perfect quality. Next: governance and ingestion hardening.
+Main 9a24f27aea25f7192f9e71c02c4a6ca690ea4098 verified; PR #3 merged with four passing checks and two main checks. Ingestion hardening and initial governance implemented on feat/ingestion-governance; CI pending. Trusted root still required; no race-free sandbox guarantee. Governance is heuristic, not proof of anonymity or no leakage. Dataset comparison pending. Public release and promotional work deferred.
