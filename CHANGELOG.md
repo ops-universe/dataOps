@@ -3,6 +3,7 @@
 ## Unreleased
 - PR #1 foundation and bounded ingestion.
 - PR #2 deterministic profiling.
-- PR #3 deterministic quality engine.
-- PR #4 merged: strict JSON, file change checks, split integrity, fingerprints and sensitive-data indicators.
-- Add deterministic version comparison, drift, quality regression and local CLI gates.
+- PR #3 quality rules.
+- PR #4 ingestion hardening and split governance.
+- PR #5 merged: version comparison, drift and CLI gates.
+- Add loopback-only dashboard with origin/token checks, functional report views and synthetic enterprise scenarios.

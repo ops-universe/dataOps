@@ -1,3 +1,3 @@
 # Resume
 
-Last verified main 10e19b74b7847a5e688ec3a3717a190f030d56cf. Four checks passed. Active branch feat/regression-cli. Verify PR head CI, reviews, rules and merge eligibility. Reproduce npm ci && npm test; cd website-react && npm ci && npm audit --audit-level=high && npm run build. Next functional local dashboard and enterprise scenarios. Trusted root required; no anonymization or leakage guarantee. Public release deferred.
+Last verified main 43abfe4840c1b2fe95bbdae4fbc2aeac38f7ac0d. PR #5 merged after four successful checks. Current branch feat/dashboard-enterprise. Verify exact-head CI, mandatory reviews and protections. npm ci && npm test; node src/dashboard-server.mjs; website-react npm ci && npm audit --audit-level=high && npm run build. Next: actual browser acceptance, security/resource review and status reconciliation. Public release deferred.
