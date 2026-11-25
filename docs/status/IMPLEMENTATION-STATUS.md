@@ -1,3 +1,3 @@
 # Status
 
-Verified main 10e19b74b7847a5e688ec3a3717a190f030d56cf: four successful checks; PR #4 merged. Phase 2 accepted within trusted-root threat model; no race-free filesystem guarantee. Split governance tested, heuristic only, not proof of anonymity or no leakage. Regression and CLI implemented on feat/regression-cli; exact-head CI pending. Next dashboard, synthetic enterprise scenarios and final security review. Public release deferred.
+Verified main 43abfe4840c1b2fe95bbdae4fbc2aeac38f7ac0d after PR #5 squash merge; four exact-head checks successful. Phases 1–6 merged. Phase 7 loopback dashboard and Phase 8 synthetic scenarios implemented on feat/dashboard-enterprise; CI and real browser acceptance pending. Trusted root required for CLI; no filesystem race isolation guarantee. No anonymization or leakage guarantees. Dashboard is local, not authentication; never proxy publicly. Public release deferred.
