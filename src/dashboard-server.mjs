@@ -7,9 +7,10 @@ import {governance} from './governance.mjs';
 import {compareDatasets} from './regression.mjs';
 import {dashboardHtml} from './dashboard-page.mjs';
 import {pathToFileURL} from 'node:url';
-const maxBody=24*1024*1024;
+export const maxBody=24*1024*1024;
 export function analyze(input){
  if(!input||typeof input.text!=='string'||!['csv','json','jsonl'].includes(input.format))throw Error('Invalid dataset');
+ if(Buffer.byteLength(input.text)>LIMITS.bytes||input.baseline!==undefined&&(typeof input.baseline!=='string'||Buffer.byteLength(input.baseline)>LIMITS.bytes)||input.contract!==undefined&&Buffer.byteLength(JSON.stringify(input.contract))>65536)throw Error('Input limit');
  const dataset=parseDataset(Buffer.from(input.text),input.format);
  const p=profile(dataset,{maxCategories:0});
  const result={profile:p};
@@ -29,6 +30,7 @@ export function dashboardServer(){
  if(req.method!=='POST'||req.url!=='/analyze')return send(404,{error:'Not found'});
  const provided=Buffer.from(String(req.headers['x-dataops-token']??''));const expected=Buffer.from(token);
  if(req.headers.origin!=='http://'+host||provided.length!==expected.length||!timingSafeEqual(provided,expected)||req.headers['content-type']!=='application/json')return send(403,{error:'Denied'});
+ if(Number(req.headers['content-length'])>maxBody){res.setHeader('Connection','close');return send(413,{error:'Input limit'});}
  if(busy)return send(429,{error:'Busy'});
  busy=true;
  try{let size=0;const parts=[];for await(const chunk of req){size+=chunk.length;if(size>maxBody){send(413,{error:'Input limit'});return;}parts.push(chunk);}
